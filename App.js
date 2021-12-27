@@ -1,111 +1,119 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+/* eslint-disable no-unused-vars */
+import axios from 'axios';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import Header from './components/Header';
+import Home from './components/Home/Home';
+import Profile from './components/Profile/Profile';
+import Collection from './components/Collection/Collection';
+import Menu from './components/Menu/Menu';
+import SearchResult from './components/SearchResult/SearchResult';
+import LogIn from './components/General/LogIn';
+import SignUp from './components/General/SignUp';
+import NavigationBar from './components/NavigationBar';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import API_KEYS from './config.js';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
+const Stack = createNativeStackNavigator();
+const url = 'https://api.yelp.com/v3/businesses/search?';
+
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState('Guest');
+  const [reviews, setReviews] = useState([]);
+  const [checkIns, setCheckIns] = useState([]);
+  const [numberOfReviews, setNumberOfReviews] = useState(0);
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
+  const [stores, setStores] = useState([]);
+  const [userCollection, setUserCollection] = useState([]);
+  const [limit, setLimit] = useState(20);
+
+  const onSearch = (term, location) => {
+    term = term || 'coffee';
+    location = location || 'Albany, NY';
+    axios
+      .get(
+        `https://api.yelp.com/v3/businesses/search?term=${term}&location=${location}&limit=${limit}`,
+        {
+          headers: {
+            'content-type': 'application/json',
+            Authorization: API_KEYS.yelp,
           },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+        },
+      )
+      .then(result => {
+        setStores(result.data.businesses);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const userLogIn = (user, userId) => {
+    console.log(user);
+    setIsLoggedIn(true);
+  };
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const userSignUp = (user, userId) => {
+    console.log(user);
+    setIsLoggedIn(true);
+  };
+
+  const userLogOut = () => {
+    setIsLoggedIn(false);
+    setUsername('Guest');
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <Header username={username} />
+        <Stack.Navigator>
+          {/* Main screens */}
+          <Stack.Screen name="Home" options={{headerShown: false}}>
+            {props => <Home onSearch={onSearch} />}
+          </Stack.Screen>
+          <Stack.Screen name="Profile" options={{headerShown: false}}>
+            {props => (
+              <Profile
+                username={username}
+                numberOfReviews={numberOfReviews}
+                numberOfLikes={numberOfLikes}
+                reviews={reviews}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="Collection" options={{headerShown: false}}>
+            {props => <Collection userCollection={userCollection} />}
+          </Stack.Screen>
+          <Stack.Screen name="Menu" options={{headerShown: false}}>
+            {props => <Menu isLoggedIn={isLoggedIn} userLogOut={userLogOut} />}
+          </Stack.Screen>
+
+          {/* Other screens */}
+          <Stack.Screen name="SearchResult" options={{headerShown: false}}>
+            {props => <SearchResult stores={stores} />}
+          </Stack.Screen>
+          <Stack.Screen name="LogIn" options={{headerShown: false}}>
+            {props => <LogIn userLogIn={userLogIn} />}
+          </Stack.Screen>
+          <Stack.Screen name="SignUp" options={{headerShown: false}}>
+            {props => <SignUp userSignUp={userSignUp} />}
+          </Stack.Screen>
+        </Stack.Navigator>
+        <NavigationBar isLoggedIn={isLoggedIn} stores={stores} />
+      </View>
+    </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  container: {
+    flex: 1,
+    paddingTop: 35,
   },
 });
 
