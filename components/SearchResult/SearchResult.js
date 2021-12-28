@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,20 +7,28 @@ import {
   ScrollView,
   TouchableHighlight,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 
+import MiniSearchBar from './MiniSearchBar';
 import StoreEntry from '../General/StoreEntry';
 
-const SearchResult = ({stores}) => {
-  const navigation = useNavigation();
+const SearchResult = ({stores, onSearch}) => {
+  const [visible, setVisible] = useState(false);
+
+  const toggleSearchBar = () => {
+    setVisible(!visible);
+  };
 
   return (
     <View style={styles.container}>
-      <TouchableHighlight
-        style={styles.search}
-        onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.text}>Search</Text>
-      </TouchableHighlight>
+      {visible ? (
+        <MiniSearchBar onSearch={onSearch} toggleSearchBar={toggleSearchBar} />
+      ) : (
+        <TouchableHighlight
+          style={styles.search}
+          onPress={() => toggleSearchBar()}>
+          <Text style={styles.text}>Search</Text>
+        </TouchableHighlight>
+      )}
       <SafeAreaView style={styles.safeArea}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerContainer}>

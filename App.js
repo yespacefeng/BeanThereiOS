@@ -35,15 +35,12 @@ const App = () => {
     term = term || 'coffee';
     location = location || 'Albany, NY';
     axios
-      .get(
-        `https://api.yelp.com/v3/businesses/search?term=${term}&location=${location}&limit=${limit}`,
-        {
-          headers: {
-            'content-type': 'application/json',
-            Authorization: API_KEYS.yelp,
-          },
+      .get(`${url}term=${term}&location=${location}&limit=${limit}`, {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: API_KEYS.yelp,
         },
-      )
+      })
       .then(result => {
         setStores(result.data.businesses);
       })
@@ -95,7 +92,7 @@ const App = () => {
 
           {/* Other screens */}
           <Stack.Screen name="SearchResult" options={{headerShown: false}}>
-            {props => <SearchResult stores={stores} />}
+            {props => <SearchResult stores={stores} onSearch={onSearch} />}
           </Stack.Screen>
           <Stack.Screen name="LogIn" options={{headerShown: false}}>
             {props => <LogIn userLogIn={userLogIn} />}
