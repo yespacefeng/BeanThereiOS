@@ -7,9 +7,12 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 const SignUp = ({userSignUp}) => {
   const navigation = useNavigation();
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirm, setConfirm] = useState();
@@ -27,7 +30,14 @@ const SignUp = ({userSignUp}) => {
       setError('Password does not match');
     } else {
       setError();
-      userSignUp(); // Send username, userId back to app.js
+      auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCridentials => {
+          userSignUp(firstName, lastName, userCridentials.user.uid);
+        })
+        .catch(errorCode => {
+          console.log(errorCode);
+        });
       navigation.goBack();
     }
   };
@@ -37,10 +47,21 @@ const SignUp = ({userSignUp}) => {
       <Text style={styles.title}>Sign Up</Text>
       <TextInput
         style={styles.input}
+        onChangeText={setFirstName}
+        value={firstName}
+        placeholder="First Name"
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={setLastName}
+        value={lastName}
+        placeholder="Last Name"
+      />
+      <TextInput
+        style={styles.input}
         onChangeText={setEmail}
         value={email}
         placeholder="E-mail"
-        enum="always"
       />
       <TextInput
         style={styles.input}

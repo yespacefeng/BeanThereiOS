@@ -18,7 +18,7 @@ const LogIn = ({userLogIn}) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(userCridentials => {
-        console.log(userCridentials.user.uid);
+        userLogIn(userCridentials.user.uid);
       })
       .catch(error => {
         console.log(error);

@@ -4,21 +4,25 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import firestore from '@react-native-firebase/firestore';
 
+// imported components
 import Header from './components/Header';
 import Home from './components/Home/Home';
 import Profile from './components/Profile/Profile';
-import Collection from './components/Collection/Collection';
+import Bookmarks from './components/Bookmarks/Bookmarks';
 import Menu from './components/Menu/Menu';
 import SearchResult from './components/SearchResult/SearchResult';
 import LogIn from './components/General/LogIn';
 import SignUp from './components/General/SignUp';
 import NavigationBar from './components/NavigationBar';
 
+// imported API keys
 import API_KEYS from './config.js';
 
 const Stack = createNativeStackNavigator();
 const url = 'https://api.yelp.com/v3/businesses/search?';
+const userCollection = firestore().collection('users');
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,7 +32,7 @@ const App = () => {
   const [numberOfReviews, setNumberOfReviews] = useState(0);
   const [numberOfLikes, setNumberOfLikes] = useState(0);
   const [stores, setStores] = useState([]);
-  const [userCollection, setUserCollection] = useState([]);
+  const [userBookmarks, setUserBookmarks] = useState([]);
   const [limit, setLimit] = useState(20);
 
   const onSearch = (term, location) => {
@@ -49,14 +53,32 @@ const App = () => {
       });
   };
 
-  const userLogIn = (user, userId) => {
-    console.log(user);
+  const userLogIn = uid => {
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .get()
+      .then(user => {
+        setUsername(user.data().firstName + ' ' + user.data().lastName);
+        setNumberOfLikes(user.data().likes);
+        setNumberOfReviews(user.data().reviews);
+      });
     setIsLoggedIn(true);
   };
 
-  const userSignUp = (user, userId) => {
-    console.log(user);
-    setIsLoggedIn(true);
+  const userSignUp = (firstName, lastName, uid) => {
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .set({
+        firstName: firstName,
+        lastName: lastName,
+        likes: 0,
+        reviews: 0,
+      })
+      .then(() => {
+        userLogIn(uid);
+      });
   };
 
   const userLogOut = () => {
@@ -83,8 +105,8 @@ const App = () => {
               />
             )}
           </Stack.Screen>
-          <Stack.Screen name="Collection" options={{headerShown: false}}>
-            {props => <Collection userCollection={userCollection} />}
+          <Stack.Screen name="Bookmarks" options={{headerShown: false}}>
+            {props => <Bookmarks userBookmarks={userBookmarks} />}
           </Stack.Screen>
           <Stack.Screen name="Menu" options={{headerShown: false}}>
             {props => <Menu isLoggedIn={isLoggedIn} userLogOut={userLogOut} />}

@@ -20,8 +20,8 @@ const NavigationBar = ({stores, isLoggedIn}) => {
     }
   };
 
-  const onCollectionPress = () => {
-    navigation.navigate('Collection');
+  const onBookmarksPress = () => {
+    navigation.navigate('Bookmarks');
     if (!isLoggedIn) {
       navigation.navigate('LogIn');
     }
@@ -42,7 +42,7 @@ const NavigationBar = ({stores, isLoggedIn}) => {
       <TouchableHighlight onPress={() => onProfilePress()}>
         <Image style={styles.image} source={require('../img/profile.png')} />
       </TouchableHighlight>
-      <TouchableHighlight onPress={() => onCollectionPress()}>
+      <TouchableHighlight onPress={() => onBookmarksPress()}>
         <Image style={styles.image} source={require('../img/save.png')} />
       </TouchableHighlight>
       <TouchableHighlight onPress={() => onMenuPress()}>

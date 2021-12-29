@@ -3,12 +3,12 @@ import {Text, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 
 import StoreEntry from '../General/StoreEntry';
 
-const Collection = ({userCollection}) => {
+const Bookmarks = ({userBookmarks}) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Your Collection</Text>
-        {userCollection.map(store => (
+        <Text style={styles.title}>Your Bookmarks</Text>
+        {userBookmarks.map(store => (
           <StoreEntry store={store} key={store.id} />
         ))}
       </ScrollView>
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Collection;
+export default Bookmarks;
