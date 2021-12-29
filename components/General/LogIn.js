@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 const LogIn = ({userLogIn}) => {
   const navigation = useNavigation();
@@ -14,7 +15,14 @@ const LogIn = ({userLogIn}) => {
   const [password, setPassword] = useState();
 
   const onLogInPress = () => {
-    userLogIn(); // Send username, userId back to app.js
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(userCridentials => {
+        console.log(userCridentials.user.uid);
+      })
+      .catch(error => {
+        console.log(error);
+      });
     navigation.goBack();
   };
 

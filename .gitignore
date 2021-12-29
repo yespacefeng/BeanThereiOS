@@ -36,6 +36,10 @@ node_modules/
 npm-debug.log
 yarn-error.log
 config.js
+ios/BeanThere.xcodeproj/project.pbxproj
+ios/BeanThere.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+ios/GoogleService-Info.plist
+
 
 # BUCK
 buck-out/
