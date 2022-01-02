@@ -10,10 +10,20 @@ const UserDetails = ({username, numberOfReviews, numberOfLikes}) => {
       />
       <Text style={styles.username}>{username}</Text>
       <View style={styles.container2}>
-        <Image style={styles.image} source={require('../../img/archive.png')} />
-        <Text>{numberOfReviews}</Text>
-        <Image style={styles.image} source={require('../../img/like.png')} />
-        <Text>{numberOfLikes}</Text>
+        <View style={styles.numContainer}>
+          <Image
+            style={styles.image}
+            source={require('../../img/archive.png')}
+          />
+          <Text>{numberOfReviews}</Text>
+        </View>
+        <View style={styles.numContainer}>
+          <Image
+            style={styles.image}
+            source={require('../../img/numOfLikes.png')}
+          />
+          <Text>{numberOfLikes}</Text>
+        </View>
       </View>
       <View style={styles.container3}>
         <Image
@@ -45,12 +55,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
   },
   container2: {
+    width: '25%',
     flexDirection: 'row',
-    alignItems: 'space-between',
+    justifyContent: 'space-between',
   },
   container3: {
     flexDirection: 'row',
     alignItems: 'space-between',
+  },
+  numContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   username: {
     fontSize: 24,

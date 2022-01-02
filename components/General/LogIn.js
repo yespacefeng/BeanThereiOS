@@ -13,17 +13,24 @@ const LogIn = ({userLogIn}) => {
   const navigation = useNavigation();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [errorCode, setErrorCode] = useState();
 
   const onLogInPress = () => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(userCridentials => {
+        navigation.goBack();
+        setErrorCode();
         userLogIn(userCridentials.user.uid);
       })
       .catch(error => {
-        console.log(error);
+        setPassword();
+        if (error.code === 'auth/user-not-found') {
+          setErrorCode('User Not Found');
+        } else if (error.code === 'auth/wrong-password') {
+          setErrorCode('Username or password is incorrect');
+        }
       });
-    navigation.goBack();
   };
 
   const onSignUpPress = () => {
@@ -34,6 +41,7 @@ const LogIn = ({userLogIn}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>LogIn</Text>
+      {errorCode && <Text style={styles.error}>{errorCode}</Text>}
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
@@ -104,6 +112,9 @@ const styles = StyleSheet.create({
   signup: {
     color: 'blue',
     textDecorationLine: 'underline',
+  },
+  error: {
+    color: '#FF0000',
   },
 });
 

@@ -16,7 +16,7 @@ const SignUp = ({userSignUp}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirm, setConfirm] = useState();
-  const [error, setError] = useState();
+  const [errorCode, setErrorCode] = useState();
 
   const onLogInPress = () => {
     navigation.pop();
@@ -24,27 +24,30 @@ const SignUp = ({userSignUp}) => {
   };
 
   const onSignUpPress = () => {
-    if (password === undefined) {
-      setError('Please Enter a password');
-    } else if (password !== confirm) {
-      setError('Password does not match');
+    if (password !== confirm) {
+      setErrorCode('Password does not match');
     } else {
-      setError();
       auth()
         .createUserWithEmailAndPassword(email, password)
         .then(userCridentials => {
           userSignUp(firstName, lastName, userCridentials.user.uid);
+          navigation.goBack();
         })
-        .catch(errorCode => {
-          console.log(errorCode);
+        .catch(error => {
+          console.log(error.code);
+          if (error.code === 'auth/email-already-in-use') {
+            setErrorCode('E-mail already in use');
+          } else if (error.code === 'auth/weak-password') {
+            setErrorCode('Weak password');
+          }
         });
-      navigation.goBack();
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
+      {errorCode && <Text style={styles.error}>{errorCode}</Text>}
       <TextInput
         style={styles.input}
         onChangeText={setFirstName}
@@ -70,7 +73,6 @@ const SignUp = ({userSignUp}) => {
         placeholder="Password"
         secureTextEntry={true}
       />
-      {error && <Text style={styles.error}>{error}</Text>}
       <TextInput
         style={styles.input}
         onChangeText={setConfirm}
