@@ -34,6 +34,7 @@ const App = () => {
   const [stores, setStores] = useState([]);
   const [userBookmarks, setUserBookmarks] = useState([]);
   const [limit, setLimit] = useState(20);
+  const [currentCafe, setCurrentCafe] = useState();
 
   const onSearch = (term, location) => {
     term = term || 'coffee';
@@ -86,6 +87,11 @@ const App = () => {
     setUsername('Guest');
   };
 
+  const onStorePress = store => {
+    console.log(store);
+    setCurrentCafe(store);
+  };
+
   return (
     <NavigationContainer>
       <View style={styles.container}>
@@ -114,7 +120,14 @@ const App = () => {
 
           {/* Other screens */}
           <Stack.Screen name="SearchResult" options={{headerShown: false}}>
-            {props => <SearchResult stores={stores} onSearch={onSearch} />}
+            {props => (
+              <SearchResult
+                stores={stores}
+                onSearch={onSearch}
+                onStorePress={onStorePress}
+                currentCafe={currentCafe}
+              />
+            )}
           </Stack.Screen>
           <Stack.Screen name="LogIn" options={{headerShown: false}}>
             {props => <LogIn userLogIn={userLogIn} />}

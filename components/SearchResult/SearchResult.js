@@ -9,9 +9,10 @@ import {
 } from 'react-native';
 
 import MiniSearchBar from './MiniSearchBar';
+import StoreDetails from './StoreDetails';
 import StoreEntry from '../General/StoreEntry';
 
-const SearchResult = ({stores, onSearch}) => {
+const SearchResult = ({stores, onSearch, onStorePress, currentCafe}) => {
   const [visible, setVisible] = useState(false);
 
   const toggleSearchBar = () => {
@@ -29,11 +30,16 @@ const SearchResult = ({stores, onSearch}) => {
           <Text style={styles.text}>Search</Text>
         </TouchableHighlight>
       )}
+      {currentCafe && <StoreDetails currentCafe={currentCafe} />}
       <SafeAreaView style={styles.safeArea}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerContainer}>
             {stores.map(store => (
-              <StoreEntry store={store} key={store.id} />
+              <StoreEntry
+                store={store}
+                onStorePress={onStorePress}
+                key={store.id}
+              />
             ))}
           </View>
         </ScrollView>
@@ -59,6 +65,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderWidth: 2,
     margin: 5,
+  },
+  storeDetails: {
+    flex: 1,
   },
   text: {
     fontSize: 24,

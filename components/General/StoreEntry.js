@@ -3,9 +3,9 @@ import {View, Text, Image, StyleSheet, TouchableHighlight} from 'react-native';
 
 import StarRating from './StarRating';
 
-const StoreEntry = ({store}) => {
+const StoreEntry = ({store, onStorePress}) => {
   const onEntryPress = () => {
-    console.log(store.name);
+    onStorePress(store);
   };
 
   const imageVerification = () => {
@@ -29,8 +29,8 @@ const StoreEntry = ({store}) => {
   };
 
   const addressFormat = () => {
-    let location = store.location;
-    return `${location.address1}\n${location.city}, ${location.state}, ${location.zip_code}`;
+    let location = store.location.display_address;
+    return `${location[0]}\n${location[1]}`;
   };
 
   const phoneNumberFormat = () => {

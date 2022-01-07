@@ -4,7 +4,10 @@ import {View, Text, Image, StyleSheet} from 'react-native';
 const Header = ({username}) => {
   return (
     <View style={styles.header}>
-      <Image style={styles.image} source={require('../img/Bean_There.png')} />
+      <Image
+        style={styles.image}
+        source={require('../img/Bean_There_Logo_2.0.png')}
+      />
       <Text style={styles.greeting}>Welcome, {username}</Text>
     </View>
   );
@@ -20,8 +23,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    height: 50,
-    width: 50,
+    height: 175,
+    width: 175,
   },
   name: {
     color: 'white',
