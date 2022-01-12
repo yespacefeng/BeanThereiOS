@@ -55,15 +55,20 @@ const NavigationBar = ({stores, isLoggedIn}) => {
 const styles = StyleSheet.create({
   container: {
     height: 75,
-    backgroundColor: '#99806C',
+    zIndex: 999,
+    backgroundColor: '#DFD7C2',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 32.5,
+    alignItems: 'flex-start',
+    shadowColor: 'black',
+    shadowOffset: {height: -2, width: 0},
+    shadowOpacity: 0.25,
   },
   image: {
     width: 40,
     height: 40,
+    margin: 25,
+    marginTop: 10,
   },
 });
 

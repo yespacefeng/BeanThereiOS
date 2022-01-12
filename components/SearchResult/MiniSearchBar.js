@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DFD7C2',
+    marginTop: 5,
     marginBottom: 5,
   },
   inputContainer: {

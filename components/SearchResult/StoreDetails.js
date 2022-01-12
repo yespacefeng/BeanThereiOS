@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableHighlight} from 'react-native';
 
 import StarRating from '../General/StarRating';
 
-const StoreDetails = ({currentCafe}) => {
+const StoreDetails = ({currentCafe, closeStoreDetailClick}) => {
   const addressFormat = () => {
     let location = currentCafe.location.display_address;
     return `${location[0]}, ${location[1]}`;
@@ -26,8 +26,13 @@ const StoreDetails = ({currentCafe}) => {
         </View>
       </View>
       <View style={styles.bottom}>
-        <Text>reviews</Text>
+        <Text>Recent Reviews</Text>
       </View>
+      <TouchableHighlight onPress={() => closeStoreDetailClick()}>
+        <View style={styles.closeButton}>
+          <Text>Close</Text>
+        </View>
+      </TouchableHighlight>
     </View>
   );
 };
@@ -35,7 +40,7 @@ const StoreDetails = ({currentCafe}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '90%',
+    alignItems: 'center',
   },
   top: {
     flex: 1,
@@ -48,15 +53,29 @@ const styles = StyleSheet.create({
   },
   topRight: {
     alignItems: 'center',
+    marginLeft: 10,
   },
   image: {
     width: 100,
     height: 100,
     borderRadius: 50,
+    marginRight: 10,
   },
   name: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  closeButton: {
+    height: 20,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    opacity: 0.5,
+    borderWidth: 2,
+    borderRadius: 10,
+    margin: 10,
+    marginBottom: 0,
   },
 });
 

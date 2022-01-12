@@ -88,8 +88,12 @@ const App = () => {
   };
 
   const onStorePress = store => {
-    console.log(store);
+    console.log(store.id);
     setCurrentCafe(store);
+  };
+
+  const closeStoreDetailClick = () => {
+    setCurrentCafe();
   };
 
   return (
@@ -126,6 +130,7 @@ const App = () => {
                 onSearch={onSearch}
                 onStorePress={onStorePress}
                 currentCafe={currentCafe}
+                closeStoreDetailClick={closeStoreDetailClick}
               />
             )}
           </Stack.Screen>

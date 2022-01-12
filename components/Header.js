@@ -3,7 +3,7 @@ import {View, Text, Image, StyleSheet} from 'react-native';
 
 const Header = ({username}) => {
   return (
-    <View style={styles.header}>
+    <View style={styles.container}>
       <Image
         style={styles.image}
         source={require('../img/Bean_There_Logo_2.0.png')}
@@ -14,13 +14,17 @@ const Header = ({username}) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
+  container: {
     height: 60,
-    padding: 15,
-    backgroundColor: '#99806C',
+    padding: 5,
+    zIndex: 999,
+    backgroundColor: '#DFD7C2',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    shadowColor: 'black',
+    shadowOffset: {height: 2, width: 0},
+    shadowOpacity: 0.25,
   },
   image: {
     height: 175,

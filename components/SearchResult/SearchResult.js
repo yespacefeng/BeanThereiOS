@@ -12,7 +12,13 @@ import MiniSearchBar from './MiniSearchBar';
 import StoreDetails from './StoreDetails';
 import StoreEntry from '../General/StoreEntry';
 
-const SearchResult = ({stores, onSearch, onStorePress, currentCafe}) => {
+const SearchResult = ({
+  stores,
+  onSearch,
+  onStorePress,
+  currentCafe,
+  closeStoreDetailClick,
+}) => {
   const [visible, setVisible] = useState(false);
 
   const toggleSearchBar = () => {
@@ -30,7 +36,12 @@ const SearchResult = ({stores, onSearch, onStorePress, currentCafe}) => {
           <Text style={styles.text}>Search</Text>
         </TouchableHighlight>
       )}
-      {currentCafe && <StoreDetails currentCafe={currentCafe} />}
+      {currentCafe && (
+        <StoreDetails
+          currentCafe={currentCafe}
+          closeStoreDetailClick={closeStoreDetailClick}
+        />
+      )}
       <SafeAreaView style={styles.safeArea}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerContainer}>
@@ -65,6 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderWidth: 2,
     margin: 5,
+    marginTop: 10,
   },
   storeDetails: {
     flex: 1,
